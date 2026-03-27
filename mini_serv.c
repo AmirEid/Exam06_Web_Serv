@@ -15,14 +15,17 @@
 // We need 3 fd_set variables, one for the read fds(FDs to receive messages), one for the write fds(FDs to send messages) and one for the active fds(To store active and running FDs).
 // we need a buffer to store the messages received and nother to store the messages we want to send to clients.
 
+#define MAX_CLIENT_FDS 65536
+#define READ_BUFFER_SIZE 1000
+#define WRITE_BUFFER_SIZE 64
 
 int count, max_fd = 0;
-int ids[35536];
-char *msgs[3556];
+int ids[MAX_CLIENT_FDS];
+char *msgs[MAX_CLIENT_FDS];
 
 fd_set read_fd, write_fd, active_fd;
-char read_buff[1000];
-char write_buff[42];
+char read_buff[READ_BUFFER_SIZE + 1];
+char write_buff[WRITE_BUFFER_SIZE];
 
 int extract_message(char **buf, char **msg)
 {
@@ -186,7 +189,7 @@ int main(int argc, char **argv) {
                 int client_fd = accept(server_fd, (struct sockaddr *)&server, &len);
                 printf("New client connected: %d\n", client_fd);
                 if (client_fd < 0)
-                    error_handler("Fatal error\n", 1);
+                    error_handler("Fatal error\n", 1); 
                 register_client(client_fd);
                 break;
             } else {
