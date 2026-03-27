@@ -193,7 +193,7 @@ int main(int argc, char **argv) {
                 register_client(client_fd);
                 break;
             } else {
-                int read_bytes = recv(fd, read_buff, 1000, 0);
+                int read_bytes = recv(fd, read_buff, READ_BUFFER_SIZE, 0);
                 printf("message received: %s\n", read_buff);
                 if (read_bytes <= 0){
                     remove_client(fd);
